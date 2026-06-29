@@ -2,26 +2,25 @@
 
 Show/Hide all open desktop windows with one-click.
 
+## Install
+
+1. Download the latest release
+2. Extract it in your `~/.local/share/gnome-shell/extensions` folder
+3. Run `gnome-extensions enable aero-peak-for-gnome@pierreprezelin.com` in the terminal (or enable it from your favorite Extensions app)
+
 ## Features
 
-### Behaviour
+- 🖼️ Mask (or keep) the active window
+- 🎨 Bring your own icon and choose its position on the panel
+- 👻 Enable/Disable window opacity on button hover
+- ⏰ Select the hover duration before fading open windows
+- ☁️ Tweak the opacity of open windows while peaking
+- ⌨️ Choose your default keyboard shortcut to show/hide all open windows
 
-- 🚧 Mask (or keep) the active window
+## Localization
 
-### Display
-
-- 🚧 Choose icon position on the panel
-- 🚧 Bring you own icon
-
-### Peak
-
-- 🚧 Enable/Disable window opacity on hover
-- 🚧 Select the hover duration before fading open windows
-- 🚧 Select the opacity of open windows while peaking
-
-### Shortcut
-
-- 🚧 Update the keyboard shortcut to show/hide all open windows
+- 🇬🇧 English
+- 🇫🇷 French
 
 ## Version history
 
