@@ -81,35 +81,24 @@ export default class AeroPeakForWindows extends Extension {
     toggleWindows() {
         const workspace = global.workspace_manager.get_active_workspace();
         const windows = workspace.list_windows();
-        const activeWindow = global.display.focus_window;
-        const keepActiveWindow = this._settings.get_boolean('keep-active-window');
+        const validWindows = windows.filter(w => !this._shouldIgnore(w));
+        const hasUnminimized = validWindows.some(w => !w.minimized);
 
-        const hasVisibleWindows = windows.some(w => {
-            if (keepActiveWindow && w === activeWindow) return false;
-            return !w.minimized;
-        });
-
-        if (hasVisibleWindows) {
-            windows.forEach(w => {
-                if (keepActiveWindow && w === activeWindow) return;
-                w.minimize();
-            });
+        if (hasUnminimized) {
+            validWindows.forEach(w => w.minimize());
         } else {
-            windows.forEach(w => w.unminimize());
+            validWindows.forEach(w => w.unminimize());
         }
     }
 
     previewDesktop(enable) {
         const workspace = global.workspace_manager.get_active_workspace();
         const windows = workspace.list_windows();
-        const activeWindow = global.display.focus_window;
-        const keepActiveWindow =
-            this._settings.get_boolean('keep-active-window');
 
         windows.forEach(w => {
             if (w.minimized) return;
             if (!this._settings.get_boolean('peak-on-hover')) return;
-            if (keepActiveWindow && w === activeWindow) return;
+            if (this._shouldIgnore(w)) return;
 
             const actor = w.get_compositor_private();
             if (actor) {
@@ -123,5 +112,37 @@ export default class AeroPeakForWindows extends Extension {
                 });
             }
         });
+    }
+
+    /**
+     * Handle ignored windows that break the toggle behaviour, like system windows
+     * (from https://github.com/amivaleo/Show-Desktop-Button)
+     */
+    _shouldIgnore(window) {
+        if (!window) return true;
+
+        const focusedWindow = global.display.get_focus_window();
+        if (
+            window === focusedWindow &&
+            this._settings.get_boolean('keep-active-window')
+        ) {
+            return true;
+        }
+
+        const windowType = window.get_window_type();
+        if (
+            windowType === Meta.WindowType.DESKTOP ||
+            windowType === Meta.WindowType.DOCK ||
+            windowType === Meta.WindowType.MODAL_DIALOG
+        ) {
+            return true;
+        }
+
+        const wmClass = (window.get_wm_class() ?? '').toLowerCase();
+        if (wmClass.includes('gjs') || wmClass.includes('prefs')) {
+            return true;
+        }
+
+        return false;
     }
 }
