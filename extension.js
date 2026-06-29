@@ -23,7 +23,6 @@ const AeroPeakButton = GObject.registerClass(
             this.connect('enter-event', () => {
                 this._extension.previewDesktop(true);
             });
-
             this.connect('leave-event', () => {
                 this._extension.previewDesktop(false);
             });
@@ -50,7 +49,6 @@ export default class AeroPeakForWindows extends Extension {
             Meta.KeyBindingFlags.NONE, // No specific flags
             Shell.ActionMode.ALL, // Active everywhere
             () => {
-                log('Shortcut pressed!');
                 this.toggleWindows();
             }
         );
