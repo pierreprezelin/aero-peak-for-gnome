@@ -1,6 +1,7 @@
 import Adw from 'gi://Adw';
 import Gdk from 'gi://Gdk';
 import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
 import Gtk from 'gi://Gtk';
 
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
@@ -86,22 +87,20 @@ export default class AeroPeakPreferences extends ExtensionPreferences {
 
         // Toggle icon
 
+        const currentIcon = settings.get_string('toggle-icon');
+
         const iconRow = new Adw.ActionRow({
             title: 'Toggle icon',
             subtitle: 'Icon for the panel button',
         });
 
-        const iconPreview = new Gtk.Image({
-            icon_size: Gtk.IconSize.LARGE,
+        const iconLabel = new Gtk.Label({
+            label: currentIcon.startsWith('/')
+                ? GLib.basename(currentIcon)
+                : currentIcon,
             valign: Gtk.Align.CENTER,
+            css_classes: ['caption'],
         });
-
-        const currentIcon = settings.get_string('toggle-icon');
-        if (currentIcon.startsWith('/')) {
-            iconPreview.set_from_file(currentIcon);
-        } else {
-            iconPreview.set_from_icon_name(currentIcon);
-        }
 
         const chooseButton = new Gtk.Button({
             label: 'Choose',
@@ -122,7 +121,6 @@ export default class AeroPeakPreferences extends ExtensionPreferences {
             filterList.append(filter);
             fileDialog.set_filters(filterList);
 
-            const currentIcon = settings.get_string('toggle-icon');
             let initialFolder;
 
             if (currentIcon.startsWith('/')) {
@@ -144,7 +142,7 @@ export default class AeroPeakPreferences extends ExtensionPreferences {
                     if (file) {
                         const path = file.get_path();
                         settings.set_string('toggle-icon', path);
-                        iconPreview.set_from_file(path);
+                        iconLabel.set_label(GLib.basename(path));
                     }
                 } catch (e) {
                     // User cancelled
@@ -161,14 +159,14 @@ export default class AeroPeakPreferences extends ExtensionPreferences {
         resetButton.connect('clicked', () => {
             settings.reset('toggle-icon');
             const defaultIcon = settings.get_string('toggle-icon');
-            iconPreview.set_from_icon_name(defaultIcon);
+            iconLabel.set_label(defaultIcon);
         });
 
         const iconBox = new Gtk.Box({
             spacing: 12,
             valign: Gtk.Align.CENTER,
         });
-        iconBox.append(iconPreview);
+        iconBox.append(iconLabel);
         iconBox.append(chooseButton);
         iconBox.append(resetButton);
 

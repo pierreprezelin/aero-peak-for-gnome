@@ -1,4 +1,5 @@
 import Clutter from 'gi://Clutter';
+import Gio from 'gi://Gio';
 import GObject from 'gi://GObject';
 import Meta from 'gi://Meta';
 import Shell from 'gi://Shell';
@@ -14,10 +15,20 @@ const AeroPeakButton = GObject.registerClass(
             super._init(0.0, extension.metadata.name, true);
             this._extension = extension;
 
-            const icon = new St.Icon({
-                icon_name: this._extension._settings.get_string('toggle-icon'),
+            const iconName =
+                this._extension._settings.get_string('toggle-icon');
+            let iconParams = {
                 style_class: 'system-status-icon',
-            });
+            };
+
+            if (iconName.startsWith('/')) {
+                const file = Gio.File.new_for_path(iconName);
+                iconParams.gicon = new Gio.FileIcon({file: file});
+            } else {
+                iconParams.icon_name = iconName;
+            }
+
+            const icon = new St.Icon(iconParams);
             this.add_child(icon);
 
             this.connect('enter-event', () => {
