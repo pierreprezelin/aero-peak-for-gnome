@@ -2,6 +2,42 @@
 <schemalist>
     <schema id="org.gnome.shell.extensions.aero-peak-for-gnome"
         path="/org/gnome/shell/extensions/aero-peak-for-gnome/">
+        <key name="keep-active-window" type="b">
+            <default>false</default>
+            <summary>Keep active window while peaking</summary>
+            <description>All other windows will be made transparent</description>
+        </key>
+        <key name="position-in-panel" type="s">
+            <default>'extreme-left'</default>
+            <summary>Button position in panel</summary>
+            <description>Position in the top panel. Valid values: 'extreme-left', 'left', 'center',
+                'right', 'extreme-right'</description>
+        </key>
+        <key name="toggle-icon" type="s">
+            <default>'computer-symbolic'</default>
+            <summary>Toggle Icon</summary>
+            <description>Icon displayed for the toggle button</description>
+        </key>
+        <key name="peak-on-hover" type="b">
+            <default>true</default>
+            <summary>Enable peak on button hover</summary>
+            <description>Make windows transparent when dedicated button in hovered</description>
+        </key>
+        <key name="peak-duration" type="i">
+            <default>200</default>
+            <summary>Peak duration</summary>
+            <description>Animation duration while peaking</description>
+        </key>
+        <key name="peak-delay" type="i">
+            <default>0</default>
+            <summary>Peak delay</summary>
+            <description>Duration before making windows transparent on hover</description>
+        </key>
+        <key name="peak-opacity" type="i">
+            <default>50</default>
+            <summary>Windows opacity</summary>
+            <description>Opacity percentage (0-100) for windows when peaking</description>
+        </key>
         <key name="toggle-shortcut" type="as">
             <default>['&lt;Ctrl&gt;&lt;Super&gt;m']</default>
             <summary>Keyboard shortcut to toggle desktop</summary>
