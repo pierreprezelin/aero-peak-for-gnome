@@ -13,8 +13,8 @@ Show/Hide all open desktop windows with one-click.
 - 🖼️ Mask (or keep) the active window
 - 🎨 Bring your own icon and choose its position on the panel
 - 👻 Enable/Disable window opacity on button hover
-- ⏰ Select the hover duration before fading open windows
 - ☁️ Tweak the opacity of open windows while peaking
+- ⏰ Select the hover animation duration and delay before fading open windows
 - ⌨️ Choose your default keyboard shortcut to show/hide all open windows
 
 ## Localization
