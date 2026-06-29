@@ -52,6 +52,18 @@ const AeroPeakButton = GObject.registerClass(
 export default class AeroPeakForWindows extends Extension {
     enable() {
         this._settings = this.getSettings();
+        this._settingsConnections = [];
+        this._settingsConnections.push(
+            this._settings.connect('changed::position-in-panel', () =>
+                this._refreshIndicator()
+            )
+        );
+        this._settingsConnections.push(
+            this._settings.connect('changed::toggle-icon', () =>
+                this._refreshIndicator()
+            )
+        );
+
         this._indicator = new AeroPeakButton(this);
 
         Main.wm.addKeybinding(
@@ -85,8 +97,38 @@ export default class AeroPeakForWindows extends Extension {
     disable() {
         this._indicator?.destroy();
         this._indicator = null;
+
+        this._settingsConnections?.forEach(id => this._settings.disconnect(id));
+        this._settingsConnections = null;
         this._settings = null;
+
         Main.wm.removeKeybinding('toggle-shortcut');
+    }
+
+    _refreshIndicator() {
+        if (this._indicator) {
+            this._indicator.destroy();
+            this._indicator = null;
+        }
+
+        this._indicator = new AeroPeakButton(this);
+
+        const positionMap = {
+            'extreme-left': {box: 'left', index: 0},
+            left: {box: 'left', index: -1},
+            center: {box: 'center', index: 0},
+            right: {box: 'right', index: 0},
+            'extreme-right': {box: 'right', index: -1},
+        };
+        const position =
+            positionMap[this._settings.get_string('position-in-panel')];
+
+        Main.panel.addToStatusArea(
+            this.uuid,
+            this._indicator,
+            position.index,
+            position.box
+        );
     }
 
     toggleWindows() {
