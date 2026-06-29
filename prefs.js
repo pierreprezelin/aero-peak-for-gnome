@@ -49,6 +49,7 @@ export default class AeroPeakPreferences extends ExtensionPreferences {
         page.add(groupAspect);
 
         // Position dropdown
+
         const positionRow = new Adw.ComboRow({
             title: 'Panel position',
             subtitle: 'Where to place the button in the panel',
@@ -81,5 +82,131 @@ export default class AeroPeakPreferences extends ExtensionPreferences {
         });
 
         groupAspect.add(positionRow);
+
+        // Icon
+
+        const iconRow = new Adw.EntryRow({
+            title: 'Icon name',
+        });
+        iconRow.set_text(settings.get_string('toggle-icon'));
+
+        settings.bind(
+            'toggle-icon',
+            iconRow,
+            'text',
+            Gio.SettingsBindFlags.DEFAULT
+        );
+
+        groupAspect.add(iconRow);
+
+        /**
+         * Aperçu
+         */
+
+        const groupPeak = new Adw.PreferencesGroup({
+            title: 'Peak',
+        });
+        page.add(groupPeak);
+
+        // Peak on hover
+
+        const peakOnHoverRow = new Adw.ActionRow({
+            title: 'Peak on hover',
+            subtitle: 'Make windows transparent when hovering the button',
+        });
+        const peakOnHoverSwitch = new Gtk.Switch({
+            active: settings.get_boolean('peak-on-hover'),
+            valign: Gtk.Align.CENTER,
+        });
+
+        settings.bind(
+            'peak-on-hover',
+            peakOnHoverSwitch,
+            'active',
+            Gio.SettingsBindFlags.DEFAULT
+        );
+
+        peakOnHoverRow.add_suffix(peakOnHoverSwitch);
+        peakOnHoverRow.activatable_widget = peakOnHoverSwitch;
+        groupPeak.add(peakOnHoverRow);
+
+        // Peak delay
+
+        const peakDelayRow = new Adw.ActionRow({
+            title: 'Peak delay (ms)',
+            subtitle: 'Delay before making windows transparent',
+        });
+        const peakDelaySpin = new Gtk.SpinButton({
+            adjustment: new Gtk.Adjustment({
+                lower: 0,
+                upper: 1000,
+                step_increment: 50,
+                page_increment: 100,
+            }),
+            valign: Gtk.Align.CENTER,
+        });
+
+        settings.bind(
+            'peak-delay',
+            peakDelaySpin,
+            'value',
+            Gio.SettingsBindFlags.DEFAULT
+        );
+
+        peakDelayRow.add_suffix(peakDelaySpin);
+        groupPeak.add(peakDelayRow);
+
+        // Peak duration
+
+        const peakDurationRow = new Adw.ActionRow({
+            title: 'Peak duration (ms)',
+            subtitle: 'Animation duration for transparency effect',
+        });
+        const peakDurationSpin = new Gtk.SpinButton({
+            adjustment: new Gtk.Adjustment({
+                lower: 0,
+                upper: 1000,
+                step_increment: 50,
+                page_increment: 100,
+            }),
+            valign: Gtk.Align.CENTER,
+        });
+
+        settings.bind(
+            'peak-duration',
+            peakDurationSpin,
+            'value',
+            Gio.SettingsBindFlags.DEFAULT
+        );
+
+        peakDurationRow.add_suffix(peakDurationSpin);
+        groupPeak.add(peakDurationRow);
+
+        // Peak opacity
+
+        const peakOpacityRow = new Adw.ActionRow({
+            title: 'Window opacity (%)',
+            subtitle: 'Opacity percentage during peak (0-100)',
+        });
+        const peakOpacityScale = new Gtk.Scale({
+            orientation: Gtk.Orientation.HORIZONTAL,
+            draw_value: true,
+            value_pos: Gtk.PositionType.RIGHT,
+            digits: 0,
+            valign: Gtk.Align.CENTER,
+            hexpand: true,
+        });
+        peakOpacityScale.set_range(0, 100);
+        peakOpacityScale.set_increments(5, 10);
+
+        settings.bind(
+            'peak-opacity',
+            peakOpacityScale.get_adjustment(),
+            'value',
+            Gio.SettingsBindFlags.DEFAULT
+        );
+
+        peakOpacityRow.add_suffix(peakOpacityScale);
+        groupPeak.add(peakOpacityRow);
     }
 }
