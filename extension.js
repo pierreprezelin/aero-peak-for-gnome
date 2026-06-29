@@ -14,7 +14,7 @@ const AeroPeakButton = GObject.registerClass(
             this._extension = extension;
 
             const icon = new St.Icon({
-                icon_name: 'display-with-window-symbolic',
+                icon_name: 'computer-symbolic',
                 style_class: 'system-status-icon',
             });
             this.add_child(icon);
