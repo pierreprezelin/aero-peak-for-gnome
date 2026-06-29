@@ -49,7 +49,7 @@ export default class AeroPeakPreferences extends ExtensionPreferences {
         });
         page.add(groupAspect);
 
-        // Position dropdown
+        // Position in panel
 
         const positionRow = new Adw.ComboRow({
             title: 'Panel position',
@@ -84,20 +84,95 @@ export default class AeroPeakPreferences extends ExtensionPreferences {
 
         groupAspect.add(positionRow);
 
-        // Icon
+        // Toggle icon
 
-        const iconRow = new Adw.EntryRow({
-            title: 'Icon name',
+        const iconRow = new Adw.ActionRow({
+            title: 'Toggle icon',
+            subtitle: 'Icon for the panel button',
         });
-        iconRow.set_text(settings.get_string('toggle-icon'));
 
-        settings.bind(
-            'toggle-icon',
-            iconRow,
-            'text',
-            Gio.SettingsBindFlags.DEFAULT
-        );
+        const iconPreview = new Gtk.Image({
+            icon_size: Gtk.IconSize.LARGE,
+            valign: Gtk.Align.CENTER,
+        });
 
+        const currentIcon = settings.get_string('toggle-icon');
+        if (currentIcon.startsWith('/')) {
+            iconPreview.set_from_file(currentIcon);
+        } else {
+            iconPreview.set_from_icon_name(currentIcon);
+        }
+
+        const chooseButton = new Gtk.Button({
+            label: 'Choose',
+            valign: Gtk.Align.CENTER,
+        });
+
+        chooseButton.connect('clicked', () => {
+            const fileDialog = new Gtk.FileDialog({
+                title: 'Choose an icon',
+            });
+
+            const filter = new Gtk.FileFilter();
+            filter.add_mime_type('image/svg+xml');
+            filter.add_mime_type('image/png');
+            filter.set_name('Images (SVG, PNG)');
+
+            const filterList = new Gio.ListStore({item_type: Gtk.FileFilter});
+            filterList.append(filter);
+            fileDialog.set_filters(filterList);
+
+            const currentIcon = settings.get_string('toggle-icon');
+            let initialFolder;
+
+            if (currentIcon.startsWith('/')) {
+                const file = Gio.File.new_for_path(currentIcon);
+                initialFolder = file.get_parent();
+            } else {
+                initialFolder = Gio.File.new_for_path(
+                    '/usr/share/icons/Adwaita/symbolic/devices/'
+                );
+            }
+
+            if (initialFolder && initialFolder.query_exists(null)) {
+                fileDialog.set_initial_folder(initialFolder);
+            }
+
+            fileDialog.open(window, null, (dialog, result) => {
+                try {
+                    const file = dialog.open_finish(result);
+                    if (file) {
+                        const path = file.get_path();
+                        settings.set_string('toggle-icon', path);
+                        iconPreview.set_from_file(path);
+                    }
+                } catch (e) {
+                    // User cancelled
+                }
+            });
+        });
+
+        const resetButton = new Gtk.Button({
+            icon_name: 'edit-undo-symbolic',
+            valign: Gtk.Align.CENTER,
+            tooltip_text: 'Reset to default',
+        });
+
+        resetButton.connect('clicked', () => {
+            settings.reset('toggle-icon');
+            const defaultIcon = settings.get_string('toggle-icon');
+            iconPreview.set_from_icon_name(defaultIcon);
+        });
+
+        const iconBox = new Gtk.Box({
+            spacing: 12,
+            valign: Gtk.Align.CENTER,
+        });
+        iconBox.append(iconPreview);
+        iconBox.append(chooseButton);
+        iconBox.append(resetButton);
+
+        iconRow.add_suffix(iconBox);
         groupAspect.add(iconRow);
 
         /**
