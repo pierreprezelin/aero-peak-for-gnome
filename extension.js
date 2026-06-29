@@ -18,6 +18,14 @@ const AeroPeakButton = GObject.registerClass(
                 style_class: 'system-status-icon',
             });
             this.add_child(icon);
+
+            this.connect('enter-event', () => {
+                this._extension.previewDesktop(true);
+            });
+
+            this.connect('leave-event', () => {
+                this._extension.previewDesktop(false);
+            });
         }
 
         vfunc_event(event) {
@@ -52,5 +60,19 @@ export default class AeroPeakForWindows extends Extension {
         } else {
             windows.forEach(w => w.unminimize());
         }
+    }
+
+    previewDesktop(enable) {
+        const workspace = global.workspace_manager.get_active_workspace();
+        const windows = workspace.list_windows();
+
+        windows.forEach(w => {
+            if (w.minimized) return;
+
+            const actor = w.get_compositor_private();
+            if (actor) {
+                actor.opacity = enable ? 177.5 : 255; // 100 = transparent, 255 = opaque
+            }
+        });
     }
 }
