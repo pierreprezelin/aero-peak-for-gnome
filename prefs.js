@@ -1,4 +1,5 @@
 import Adw from 'gi://Adw';
+import Gdk from 'gi://Gdk';
 import Gio from 'gi://Gio';
 import Gtk from 'gi://Gtk';
 
@@ -208,5 +209,77 @@ export default class AeroPeakPreferences extends ExtensionPreferences {
 
         peakOpacityRow.add_suffix(peakOpacityScale);
         groupPeak.add(peakOpacityRow);
+
+        /**
+         * Keyboard Shortcut
+         */
+
+        const groupShortcut = new Adw.PreferencesGroup({
+            title: 'Shortcut',
+        });
+        page.add(groupShortcut);
+
+        const shortcutRow = new Adw.ActionRow({
+            title: 'Toggle shortcut',
+            subtitle: 'Keyboard shortcut to show/hide all windows',
+        });
+
+        const shortcutLabel = new Gtk.ShortcutLabel({
+            disabled_text: 'New shortcut...',
+            valign: Gtk.Align.CENTER,
+        });
+
+        const currentShortcut = settings.get_strv('toggle-shortcut');
+        if (currentShortcut.length > 0) {
+            shortcutLabel.set_accelerator(currentShortcut[0]);
+        }
+
+        const shortcutButton = new Gtk.Button({
+            label: 'Set',
+            valign: Gtk.Align.CENTER,
+        });
+
+        shortcutButton.connect('clicked', () => {
+            const dialog = new Gtk.MessageDialog({
+                transient_for: window,
+                modal: true,
+                buttons: Gtk.ButtonsType.CANCEL,
+                text: 'Press new shortcut',
+                secondary_text: 'Press Escape to cancel',
+            });
+
+            const eventController = new Gtk.EventControllerKey();
+            eventController.connect(
+                'key-pressed',
+                (controller, keyval, keycode, state) => {
+                    if (keyval === Gdk.KEY_Escape) {
+                        dialog.close();
+                        return true;
+                    }
+
+                    const mask = state & Gtk.accelerator_get_default_mod_mask();
+                    if (Gtk.accelerator_valid(keyval, mask)) {
+                        const shortcut = Gtk.accelerator_name(keyval, mask);
+                        settings.set_strv('toggle-shortcut', [shortcut]);
+                        shortcutLabel.set_accelerator(shortcut);
+                        dialog.close();
+                    }
+                    return true;
+                }
+            );
+
+            dialog.add_controller(eventController);
+            dialog.show();
+        });
+
+        const shortcutBox = new Gtk.Box({
+            spacing: 12,
+            valign: Gtk.Align.CENTER,
+        });
+        shortcutBox.append(shortcutLabel);
+        shortcutBox.append(shortcutButton);
+
+        shortcutRow.add_suffix(shortcutBox);
+        groupShortcut.add(shortcutRow);
     }
 }
