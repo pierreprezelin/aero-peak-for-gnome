@@ -1,6 +1,7 @@
 import Clutter from 'gi://Clutter';
 import GObject from 'gi://GObject';
 import Meta from 'gi://Meta';
+import Shell from 'gi://Shell';
 import St from 'gi://St';
 
 import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
@@ -41,12 +42,26 @@ const AeroPeakButton = GObject.registerClass(
 export default class AeroPeakForWindows extends Extension {
     enable() {
         this._indicator = new AeroPeakButton(this);
+        this._settings = this.getSettings();
+
+        Main.wm.addKeybinding(
+            'toggle-shortcut', // name of the key (in the schema)
+            this._settings, // Settings object
+            Meta.KeyBindingFlags.NONE, // No specific flags
+            Shell.ActionMode.ALL, // Active everywhere
+            () => {
+                log('Shortcut pressed!');
+                this.toggleWindows();
+            }
+        );
         Main.panel.addToStatusArea(this.uuid, this._indicator);
     }
 
     disable() {
         this._indicator?.destroy();
         this._indicator = null;
+        this._settings = null;
+        Main.wm.removeKeybinding('toggle-shortcut');
     }
 
     toggleWindows() {

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+    <schema id="org.gnome.shell.extensions.aero-peak-for-gnome"
+        path="/org/gnome/shell/extensions/aero-peak-for-gnome/">
+        <key name="toggle-shortcut" type="as">
+            <default>['&lt;Ctrl&gt;&lt;Super&gt;m']</default>
+            <summary>Keyboard shortcut to toggle desktop</summary>
+            <description>Keyboard shortcut to show/hide all windows</description>
+        </key>
+    </schema>
+</schemalist>

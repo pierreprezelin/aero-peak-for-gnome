@@ -1,10 +1,11 @@
 {
-	"_generated": "",
-	"description": "Show/Hide all open desktop windows with one-click.",
-	"gettext-domain": "aero-peak-for-gnome",
-	"name": "Aero Peak for GNOME",
-	"shell-version": ["50"],
-	"url": "https://github.com/pierreprezelin/aero-peak-for-gnome",
-	"uuid": "aero-peak-for-gnome@pierreprezelin.com",
-	"version": 1
+    "_generated": "",
+    "description": "Show/Hide all open desktop windows with one-click.",
+    "gettext-domain": "aero-peak-for-gnome",
+    "name": "Aero Peak for GNOME",
+    "version": 1,
+    "shell-version": ["50"],
+    "url": "https://github.com/pierreprezelin/aero-peak-for-gnome",
+    "uuid": "aero-peak-for-gnome@pierreprezelin.com",
+    "settings-schema": "org.gnome.shell.extensions.aero-peak-for-gnome"
 }
