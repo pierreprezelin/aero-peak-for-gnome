@@ -9,7 +9,7 @@ import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/ex
 export default class AeroPeekPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         const settings = this.getSettings();
-        const {gettext: _} = this;
+        const _ = this.gettext.bind(this);
 
         const page = new Adw.PreferencesPage();
         window.add(page);
