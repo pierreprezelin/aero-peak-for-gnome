@@ -3,8 +3,8 @@
     "version": "1.0.0",
     "sourceType": "module",
     "scripts": {
-        "format": "prettier format .",
-        "lint": "eslint --write ." ,
+        "format": "bunx prettier . --write",
+        "lint": "bunx eslint '**/*.{js,ts}' --fix",
         "translations:extract": "xgettext --from-code=UTF-8 --language=JavaScript --keyword=_ --output=po/aero-peek-for-gnome.pot --package-name=aero-peek-for-gnome --package-version=1 --copyright-holder='Pierre Prezelin' --msgid-bugs-address=pierreprezelin.pro@gmail.com prefs.js",
         "translations:compile": "find po -name '*.po' | while read f; do lang=$(basename \"$f\" .po); mkdir -p \"locale/$lang/LC_MESSAGES\" && msgfmt \"$f\" -o \"locale/$lang/LC_MESSAGES/aero-peek-for-gnome.mo\"; done"
     },

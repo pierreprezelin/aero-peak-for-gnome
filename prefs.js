@@ -137,7 +137,10 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
         };
         updateIconLabel();
 
-        const iconChangedId = settings.connect('changed::toggle-icon', updateIconLabel);
+        const iconChangedId = settings.connect(
+            'changed::toggle-icon',
+            updateIconLabel
+        );
         window.connect('destroy', () => settings.disconnect(iconChangedId));
 
         iconButton.connect('clicked', () => {
@@ -177,7 +180,7 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
                         if (path) settings.set_string('toggle-icon', path);
                     }
                 } catch (e) {
-                    // User cancelled
+                    console.debug(e);
                 }
             });
         });
@@ -321,7 +324,9 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
 
         const shortcutRow = new Adw.ActionRow({
             title: _('Toggle windows'),
-            subtitle: _('Toggle windows with your keyboard instead of a click.'),
+            subtitle: _(
+                'Toggle windows with your keyboard instead of a click.'
+            ),
         });
 
         const shortcutLabel = new Gtk.ShortcutLabel({

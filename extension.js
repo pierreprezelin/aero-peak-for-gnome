@@ -9,6 +9,54 @@ import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 
+const POSITION_MAP = {
+    'extreme-left': {box: 'left', index: 0},
+    left: {box: 'left', index: -1},
+    center: {box: 'center', index: 0},
+    right: {box: 'right', index: 0},
+    'extreme-right': {box: 'right', index: -1},
+};
+
+const AeroPeekButton = GObject.registerClass(
+    class AeroPeekButton extends PanelMenu.Button {
+        _init(extension) {
+            super._init(0.0, extension.metadata.name, true);
+            this._extension = extension;
+
+            const iconName =
+                this._extension._settings.get_string('toggle-icon');
+            let iconParams = {
+                style_class: 'system-status-icon',
+            };
+
+            if (iconName.startsWith('/')) {
+                const file = Gio.File.new_for_path(iconName);
+                iconParams.gicon = new Gio.FileIcon({file: file});
+            } else {
+                iconParams.icon_name = iconName;
+            }
+
+            const icon = new St.Icon(iconParams);
+            this.add_child(icon);
+
+            this.connect('enter-event', () => {
+                this._extension.previewDesktop(true);
+            });
+            this.connect('leave-event', () => {
+                this._extension.previewDesktop(false);
+            });
+        }
+
+        vfunc_event(event) {
+            if (event.type() === Clutter.EventType.BUTTON_PRESS) {
+                this._extension.toggleWindows();
+                return Clutter.EVENT_STOP;
+            }
+            return Clutter.EVENT_PROPAGATE;
+        }
+    }
+);
+
 export default class AeroPeekForWindows extends Extension {
     enable() {
         this._settings = this.getSettings();
@@ -119,7 +167,7 @@ export default class AeroPeekForWindows extends Extension {
     }
 
     /**
-     * Handle ignored windows that break the toggle behaviour, like system windows
+     * Filter out windows that should be excluded from toggle behaviour, such as system windows.
      * (from https://github.com/amivaleo/Show-Desktop-Button)
      */
     _shouldIgnore(window) {
@@ -150,51 +198,3 @@ export default class AeroPeekForWindows extends Extension {
         return false;
     }
 }
-
-const AeroPeekButton = GObject.registerClass(
-    class AeroPeekButton extends PanelMenu.Button {
-        _init(extension) {
-            super._init(0.0, extension.metadata.name, true);
-            this._extension = extension;
-
-            const iconName =
-                this._extension._settings.get_string('toggle-icon');
-            let iconParams = {
-                style_class: 'system-status-icon',
-            };
-
-            if (iconName.startsWith('/')) {
-                const file = Gio.File.new_for_path(iconName);
-                iconParams.gicon = new Gio.FileIcon({file: file});
-            } else {
-                iconParams.icon_name = iconName;
-            }
-
-            const icon = new St.Icon(iconParams);
-            this.add_child(icon);
-
-            this.connect('enter-event', () => {
-                this._extension.previewDesktop(true);
-            });
-            this.connect('leave-event', () => {
-                this._extension.previewDesktop(false);
-            });
-        }
-
-        vfunc_event(event) {
-            if (event.type() === Clutter.EventType.BUTTON_PRESS) {
-                this._extension.toggleWindows();
-                return Clutter.EVENT_STOP;
-            }
-            return Clutter.EVENT_PROPAGATE;
-        }
-    }
-);
-
-const POSITION_MAP = {
-    'extreme-left': {box: 'left', index: 0},
-    left: {box: 'left', index: -1},
-    center: {box: 'center', index: 0},
-    right: {box: 'right', index: 0},
-    'extreme-right': {box: 'right', index: -1},
-};
