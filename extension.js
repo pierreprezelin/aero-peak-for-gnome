@@ -9,6 +9,148 @@ import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 
+export default class AeroPeekForWindows extends Extension {
+    enable() {
+        this._settings = this.getSettings();
+        this._settingsConnections = [];
+        this._settingsConnections.push(
+            this._settings.connect('changed::position-in-panel', () =>
+                this._refreshIndicator()
+            )
+        );
+        this._settingsConnections.push(
+            this._settings.connect('changed::toggle-icon', () =>
+                this._refreshIndicator()
+            )
+        );
+
+        this._indicator = new AeroPeekButton(this);
+        this._addIndicatorToPanel();
+
+        Main.wm.addKeybinding(
+            'toggle-shortcut',
+            this._settings,
+            Meta.KeyBindingFlags.NONE,
+            Shell.ActionMode.ALL,
+            () => {
+                this.toggleWindows();
+            }
+        );
+    }
+
+    disable() {
+        this.previewDesktop(false);
+
+        this._indicator?.destroy();
+        this._indicator = null;
+
+        this._settingsConnections?.forEach(id => this._settings.disconnect(id));
+        this._settingsConnections = null;
+        this._settings = null;
+
+        Main.wm.removeKeybinding('toggle-shortcut');
+    }
+
+    previewDesktop(enable) {
+        if (!this._settings) return;
+        if (enable && !this._settings.get_boolean('peek-on-hover')) return;
+
+        const workspace = global.workspace_manager.get_active_workspace();
+        const windows = workspace.list_windows();
+        const peekOpacity = enable
+            ? (this._settings.get_int('peek-opacity') / 100) * 255
+            : 255;
+        const peekDuration = this._settings.get_int('peek-duration');
+        const peekDelay = enable ? this._settings.get_int('peek-delay') : 0;
+
+        windows.forEach(w => {
+            if (w.minimized) return;
+            if (this._shouldIgnore(w)) return;
+
+            const actor = w.get_compositor_private();
+            if (actor) {
+                actor.remove_all_transitions();
+                actor.ease({
+                    opacity: peekOpacity,
+                    duration: peekDuration,
+                    delay: peekDelay,
+                    mode: Clutter.AnimationMode.EASE_OUT_QUAD,
+                });
+            }
+        });
+    }
+
+    toggleWindows() {
+        const workspace = global.workspace_manager.get_active_workspace();
+        const windows = workspace.list_windows();
+        const validWindows = windows.filter(w => !this._shouldIgnore(w));
+        const hasUnminimized = validWindows.some(w => !w.minimized);
+
+        if (hasUnminimized) {
+            validWindows.forEach(w => w.minimize());
+        } else {
+            validWindows.forEach(w => w.unminimize());
+        }
+    }
+
+    _addIndicatorToPanel() {
+        const position =
+            POSITION_MAP[this._settings.get_string('position-in-panel')] ??
+            POSITION_MAP['extreme-left'];
+
+        Main.panel.addToStatusArea(
+            this.uuid,
+            this._indicator,
+            position.index,
+            position.box
+        );
+    }
+
+    _refreshIndicator() {
+        this.previewDesktop(false);
+
+        if (this._indicator) {
+            this._indicator.destroy();
+            this._indicator = null;
+        }
+
+        this._indicator = new AeroPeekButton(this);
+        this._addIndicatorToPanel();
+    }
+
+    /**
+     * Handle ignored windows that break the toggle behaviour, like system windows
+     * (from https://github.com/amivaleo/Show-Desktop-Button)
+     */
+    _shouldIgnore(window) {
+        if (!window) return true;
+
+        const focusedWindow = global.display.get_focus_window();
+        if (
+            window === focusedWindow &&
+            this._settings.get_boolean('keep-active-window')
+        ) {
+            return true;
+        }
+
+        const windowType = window.get_window_type();
+        if (
+            windowType === Meta.WindowType.DESKTOP ||
+            windowType === Meta.WindowType.DOCK ||
+            windowType === Meta.WindowType.MODAL_DIALOG
+        ) {
+            return true;
+        }
+
+        const wmClass = (window.get_wm_class() ?? '').toLowerCase();
+        if (wmClass.includes('gjs') || wmClass.includes('prefs')) {
+            return true;
+        }
+
+        return false;
+    }
+}
+
 const AeroPeekButton = GObject.registerClass(
     class AeroPeekButton extends PanelMenu.Button {
         _init(extension) {
@@ -49,154 +191,10 @@ const AeroPeekButton = GObject.registerClass(
     }
 );
 
-export default class AeroPeekForWindows extends Extension {
-    enable() {
-        this._settings = this.getSettings();
-        this._settingsConnections = [];
-        this._settingsConnections.push(
-            this._settings.connect('changed::position-in-panel', () =>
-                this._refreshIndicator()
-            )
-        );
-        this._settingsConnections.push(
-            this._settings.connect('changed::toggle-icon', () =>
-                this._refreshIndicator()
-            )
-        );
-
-        this._indicator = new AeroPeekButton(this);
-
-        Main.wm.addKeybinding(
-            'toggle-shortcut',
-            this._settings,
-            Meta.KeyBindingFlags.NONE,
-            Shell.ActionMode.ALL,
-            () => {
-                this.toggleWindows();
-            }
-        );
-
-        const positionMap = {
-            'extreme-left': {box: 'left', index: 0},
-            left: {box: 'left', index: -1},
-            center: {box: 'center', index: 0},
-            right: {box: 'right', index: 0},
-            'extreme-right': {box: 'right', index: -1},
-        };
-        const position =
-            positionMap[this._settings.get_string('position-in-panel')];
-
-        Main.panel.addToStatusArea(
-            this.uuid,
-            this._indicator,
-            position.index,
-            position.box
-        );
-    }
-
-    disable() {
-        this._indicator?.destroy();
-        this._indicator = null;
-
-        this._settingsConnections?.forEach(id => this._settings.disconnect(id));
-        this._settingsConnections = null;
-        this._settings = null;
-
-        Main.wm.removeKeybinding('toggle-shortcut');
-    }
-
-    previewDesktop(enable) {
-        const workspace = global.workspace_manager.get_active_workspace();
-        const windows = workspace.list_windows();
-
-        windows.forEach(w => {
-            if (w.minimized) return;
-            if (enable && !this._settings.get_boolean('peek-on-hover')) return;
-            if (this._shouldIgnore(w)) return;
-
-            const actor = w.get_compositor_private();
-            if (actor) {
-                actor.remove_all_transitions();
-                actor.ease({
-                    opacity: enable
-                        ? (this._settings.get_int('peek-opacity') / 100) * 255
-                        : 255,
-                    duration: this._settings.get_int('peek-duration'),
-                    delay: enable ? this._settings.get_int('peek-delay') : 0,
-                    mode: Clutter.AnimationMode.EASE_OUT_QUAD,
-                });
-            }
-        });
-    }
-
-    toggleWindows() {
-        const workspace = global.workspace_manager.get_active_workspace();
-        const windows = workspace.list_windows();
-        const validWindows = windows.filter(w => !this._shouldIgnore(w));
-        const hasUnminimized = validWindows.some(w => !w.minimized);
-
-        if (hasUnminimized) {
-            validWindows.forEach(w => w.minimize());
-        } else {
-            validWindows.forEach(w => w.unminimize());
-        }
-    }
-
-    _refreshIndicator() {
-        if (this._indicator) {
-            this._indicator.destroy();
-            this._indicator = null;
-        }
-
-        this._indicator = new AeroPeekButton(this);
-
-        const positionMap = {
-            'extreme-left': {box: 'left', index: 0},
-            left: {box: 'left', index: -1},
-            center: {box: 'center', index: 0},
-            right: {box: 'right', index: 0},
-            'extreme-right': {box: 'right', index: -1},
-        };
-        const position =
-            positionMap[this._settings.get_string('position-in-panel')];
-
-        Main.panel.addToStatusArea(
-            this.uuid,
-            this._indicator,
-            position.index,
-            position.box
-        );
-    }
-
-    /**
-     * Handle ignored windows that break the toggle behaviour, like system windows
-     * (from https://github.com/amivaleo/Show-Desktop-Button)
-     */
-    _shouldIgnore(window) {
-        if (!window) return true;
-
-        const focusedWindow = global.display.get_focus_window();
-        if (
-            window === focusedWindow &&
-            this._settings.get_boolean('keep-active-window')
-        ) {
-            return true;
-        }
-
-        const windowType = window.get_window_type();
-        if (
-            windowType === Meta.WindowType.DESKTOP ||
-            windowType === Meta.WindowType.DOCK ||
-            windowType === Meta.WindowType.MODAL_DIALOG
-        ) {
-            return true;
-        }
-
-        const wmClass = (window.get_wm_class() ?? '').toLowerCase();
-        if (wmClass.includes('gjs') || wmClass.includes('prefs')) {
-            return true;
-        }
-
-        return false;
-    }
-}
+const POSITION_MAP = {
+    'extreme-left': {box: 'left', index: 0},
+    left: {box: 'left', index: -1},
+    center: {box: 'center', index: 0},
+    right: {box: 'right', index: 0},
+    'extreme-right': {box: 'right', index: -1},
+};

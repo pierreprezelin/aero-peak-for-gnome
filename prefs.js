@@ -74,7 +74,8 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
             'extreme-right',
         ];
         const currentPosition = settings.get_string('position-in-panel');
-        positionRow.set_selected(positionValues.indexOf(currentPosition));
+        const positionIdx = positionValues.indexOf(currentPosition);
+        positionRow.set_selected(positionIdx >= 0 ? positionIdx : 0);
 
         positionRow.connect('notify::selected', () => {
             settings.set_string(
@@ -111,7 +112,8 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
         };
         updateIconLabel();
 
-        settings.connect('changed::toggle-icon', updateIconLabel);
+        const iconChangedId = settings.connect('changed::toggle-icon', updateIconLabel);
+        window.connect('destroy', () => settings.disconnect(iconChangedId));
 
         iconButton.connect('clicked', () => {
             const fileDialog = new Gtk.FileDialog({
@@ -147,7 +149,7 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
                     const file = dialog.open_finish(result);
                     if (file) {
                         const path = file.get_path();
-                        settings.set_string('toggle-icon', path);
+                        if (path) settings.set_string('toggle-icon', path);
                     }
                 } catch (e) {
                     // User cancelled
