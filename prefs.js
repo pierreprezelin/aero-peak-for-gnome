@@ -9,6 +9,7 @@ import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/ex
 export default class AeroPeekPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         const settings = this.getSettings();
+        const {gettext: _} = this;
 
         const page = new Adw.PreferencesPage();
         window.add(page);
@@ -17,7 +18,7 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
             const btn = new Gtk.Button({
                 icon_name: 'edit-undo-symbolic',
                 valign: Gtk.Align.CENTER,
-                tooltip_text: 'Reset to default',
+                tooltip_text: _('Reset to default'),
             });
             btn.connect('clicked', () => settings.reset(key));
             return btn;
@@ -28,13 +29,13 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
          */
 
         const groupBehaviour = new Adw.PreferencesGroup({
-            title: 'Behaviour',
+            title: _('Behaviour'),
         });
         page.add(groupBehaviour);
 
         const keepActiveRow = new Adw.ActionRow({
-            title: 'Keep active window',
-            subtitle: 'Do not hide the active window on toggle.',
+            title: _('Keep active window'),
+            subtitle: _('Do not hide the active window on toggle.'),
         });
         const keepActiveSwitch = new Gtk.Switch({
             active: settings.get_boolean('keep-active-window'),
@@ -56,23 +57,23 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
          */
 
         const groupAspect = new Adw.PreferencesGroup({
-            title: 'Aspect',
+            title: _('Aspect'),
         });
         page.add(groupAspect);
 
         // Position in panel
 
         const positionRow = new Adw.ComboRow({
-            title: 'Position on panel',
-            subtitle: 'Where to place the toggle on the panel.',
+            title: _('Position on panel'),
+            subtitle: _('Where to place the toggle on the panel.'),
         });
 
         const positionModel = new Gtk.StringList();
-        positionModel.append('Extreme Left');
-        positionModel.append('Left');
-        positionModel.append('Center');
-        positionModel.append('Right');
-        positionModel.append('Extreme Right');
+        positionModel.append(_('Extreme Left'));
+        positionModel.append(_('Left'));
+        positionModel.append(_('Center'));
+        positionModel.append(_('Right'));
+        positionModel.append(_('Extreme Right'));
 
         positionRow.set_model(positionModel);
 
@@ -97,7 +98,7 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
         const positionResetButton = new Gtk.Button({
             icon_name: 'edit-undo-symbolic',
             valign: Gtk.Align.CENTER,
-            tooltip_text: 'Reset to default',
+            tooltip_text: _('Reset to default'),
         });
         positionResetButton.connect('clicked', () => {
             settings.reset('position-in-panel');
@@ -113,13 +114,13 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
         // Toggle icon
 
         const iconRow = new Adw.ActionRow({
-            title: 'Toggle Icon (.svg)',
-            subtitle: 'Icon file used for the panel toggle.',
+            title: _('Toggle icon (.svg)'),
+            subtitle: _('Icon file used for the panel toggle.'),
         });
 
         const iconButton = new Gtk.Button({
             valign: Gtk.Align.CENTER,
-            tooltip_text: 'Click to change icon',
+            tooltip_text: _('Click to change icon'),
         });
         iconButton.set_child(new Gtk.Label());
 
@@ -141,12 +142,12 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
 
         iconButton.connect('clicked', () => {
             const fileDialog = new Gtk.FileDialog({
-                title: 'Choose an icon',
+                title: _('Choose an icon'),
             });
 
             const filter = new Gtk.FileFilter();
             filter.add_mime_type('image/svg+xml');
-            filter.set_name('Images (SVG)');
+            filter.set_name(_('Images (SVG)'));
 
             const filterList = new Gio.ListStore({item_type: Gtk.FileFilter});
             filterList.append(filter);
@@ -196,15 +197,15 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
          */
 
         const groupPeek = new Adw.PreferencesGroup({
-            title: 'Peek',
+            title: _('Peek'),
         });
         page.add(groupPeek);
 
         // Peek on hover
 
         const peekOnHoverRow = new Adw.ActionRow({
-            title: 'Peek on hover',
-            subtitle: 'Make windows transparent when hovering the button.',
+            title: _('Peek on hover'),
+            subtitle: _('Make windows transparent when hovering the button.'),
         });
         const peekOnHoverSwitch = new Gtk.Switch({
             active: settings.get_boolean('peek-on-hover'),
@@ -225,8 +226,8 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
         // Peek delay
 
         const peekDelayRow = new Adw.ActionRow({
-            title: 'Peek delay (ms)',
-            subtitle: 'Delay before making windows transparent.',
+            title: _('Peek delay (ms)'),
+            subtitle: _('Delay before making windows transparent.'),
         });
         const peekDelaySpin = new Gtk.SpinButton({
             adjustment: new Gtk.Adjustment({
@@ -252,8 +253,8 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
         // Peek duration
 
         const peekDurationRow = new Adw.ActionRow({
-            title: 'Peek duration (ms)',
-            subtitle: 'Animation duration for transparency effect.',
+            title: _('Peek duration (ms)'),
+            subtitle: _('Animation duration for transparency effect.'),
         });
         const peekDurationSpin = new Gtk.SpinButton({
             adjustment: new Gtk.Adjustment({
@@ -279,8 +280,8 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
         // Peek opacity
 
         const peekOpacityRow = new Adw.ActionRow({
-            title: 'Window opacity (%)',
-            subtitle: 'Opacity percentage during peek (0-100).',
+            title: _('Window opacity (%)'),
+            subtitle: _('Opacity percentage during peek (0-100).'),
         });
         const peekOpacityScale = new Gtk.Scale({
             orientation: Gtk.Orientation.HORIZONTAL,
@@ -294,7 +295,7 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
         peekOpacityScale.set_increments(5, 10);
         peekOpacityScale.add_mark(
             settings.get_default_value('peek-opacity').get_int32(),
-            Gtk.PositionType.TOP,
+            Gtk.PositionType.BOTTOM,
             null
         );
 
@@ -314,17 +315,17 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
          */
 
         const groupShortcut = new Adw.PreferencesGroup({
-            title: 'Shortcuts',
+            title: _('Shortcuts'),
         });
         page.add(groupShortcut);
 
         const shortcutRow = new Adw.ActionRow({
-            title: 'Toggle windows',
-            subtitle: 'Toggle windows with your keyboard instead of a click.',
+            title: _('Toggle windows'),
+            subtitle: _('Toggle windows with your keyboard instead of a click.'),
         });
 
         const shortcutLabel = new Gtk.ShortcutLabel({
-            disabled_text: 'New shortcut...',
+            disabled_text: _('New shortcut…'),
             valign: Gtk.Align.CENTER,
         });
 
@@ -334,7 +335,7 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
         }
 
         const shortcutButton = new Gtk.Button({
-            label: 'Set',
+            label: _('Set'),
             valign: Gtk.Align.CENTER,
         });
 
@@ -343,8 +344,8 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
                 transient_for: window,
                 modal: true,
                 buttons: Gtk.ButtonsType.CANCEL,
-                text: 'Enter new shortcut',
-                secondary_text: 'Press Escape to cancel',
+                text: _('Enter new shortcut'),
+                secondary_text: _('Press Escape to cancel'),
             });
 
             const eventController = new Gtk.EventControllerKey();
@@ -374,7 +375,7 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
         const shortcutResetButton = new Gtk.Button({
             icon_name: 'edit-undo-symbolic',
             valign: Gtk.Align.CENTER,
-            tooltip_text: 'Reset to default',
+            tooltip_text: _('Reset to default'),
         });
         shortcutResetButton.connect('clicked', () => {
             settings.reset('toggle-shortcut');

@@ -1,0 +1,150 @@
+# Italian translations for aero-peek-for-gnome.
+# Copyright (C) 2026 Pierre Prezelin
+# This file is distributed under the same license as the aero-peek-for-gnome package.
+# Pierre Prezelin <pierreprezelin.pro@gmail.com>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: aero-peek-for-gnome 1\n"
+"Report-Msgid-Bugs-To: pierreprezelin.pro@gmail.com\n"
+"POT-Creation-Date: 2026-06-30 14:11+0200\n"
+"PO-Revision-Date: 2026-06-30 14:11+0200\n"
+"Last-Translator: Pierre Prezelin <pierreprezelin.pro@gmail.com>\n"
+"Language-Team: Italian\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: prefs.js
+msgid "Reset to default"
+msgstr "Ripristina"
+
+#: prefs.js
+msgid "Behaviour"
+msgstr "Comportamento"
+
+#: prefs.js
+msgid "Keep active window"
+msgstr "Mantieni finestra attiva"
+
+#: prefs.js
+msgid "Do not hide the active window on toggle."
+msgstr "Non nascondere la finestra attiva durante l'attivazione."
+
+#: prefs.js
+msgid "Aspect"
+msgstr "Aspetto"
+
+#: prefs.js
+msgid "Position on panel"
+msgstr "Posizione nel pannello"
+
+#: prefs.js
+msgid "Where to place the toggle on the panel."
+msgstr "Dove posizionare il pulsante nel pannello."
+
+#: prefs.js
+msgid "Extreme Left"
+msgstr "Estrema sinistra"
+
+#: prefs.js
+msgid "Left"
+msgstr "Sinistra"
+
+#: prefs.js
+msgid "Center"
+msgstr "Centro"
+
+#: prefs.js
+msgid "Right"
+msgstr "Destra"
+
+#: prefs.js
+msgid "Extreme Right"
+msgstr "Estrema destra"
+
+#: prefs.js
+msgid "Toggle icon (.svg)"
+msgstr "Icona del pulsante (.svg)"
+
+#: prefs.js
+msgid "Icon file used for the panel toggle."
+msgstr "File icona usato per il pulsante del pannello."
+
+#: prefs.js
+msgid "Click to change icon"
+msgstr "Clic per cambiare l'icona"
+
+#: prefs.js
+msgid "Choose an icon"
+msgstr "Scegli un'icona"
+
+#: prefs.js
+msgid "Images (SVG)"
+msgstr "Immagini (SVG)"
+
+#: prefs.js
+msgid "Peek"
+msgstr "Anteprima"
+
+#: prefs.js
+msgid "Peek on hover"
+msgstr "Anteprima al passaggio del cursore"
+
+#: prefs.js
+msgid "Make windows transparent when hovering the button."
+msgstr "Rende le finestre trasparenti quando si passa il cursore sul pulsante."
+
+#: prefs.js
+msgid "Peek delay (ms)"
+msgstr "Ritardo anteprima (ms)"
+
+#: prefs.js
+msgid "Delay before making windows transparent."
+msgstr "Ritardo prima di rendere le finestre trasparenti."
+
+#: prefs.js
+msgid "Peek duration (ms)"
+msgstr "Durata anteprima (ms)"
+
+#: prefs.js
+msgid "Animation duration for transparency effect."
+msgstr "Durata dell'animazione per l'effetto trasparenza."
+
+#: prefs.js
+msgid "Window opacity (%)"
+msgstr "Opacità finestre (%)"
+
+#: prefs.js
+msgid "Opacity percentage during peek (0-100)."
+msgstr "Percentuale di opacità durante l'anteprima (0-100)."
+
+#: prefs.js
+msgid "Shortcuts"
+msgstr "Scorciatoie"
+
+#: prefs.js
+msgid "Toggle windows"
+msgstr "Attiva/disattiva finestre"
+
+#: prefs.js
+msgid "Toggle windows with your keyboard instead of a click."
+msgstr "Attiva/disattiva le finestre con la tastiera invece di un clic."
+
+#: prefs.js
+msgid "New shortcut…"
+msgstr "Nuova scorciatoia…"
+
+#: prefs.js
+msgid "Set"
+msgstr "Imposta"
+
+#: prefs.js
+msgid "Enter new shortcut"
+msgstr "Inserisci nuova scorciatoia"
+
+#: prefs.js
+msgid "Press Escape to cancel"
+msgstr "Premi Escape per annullare"

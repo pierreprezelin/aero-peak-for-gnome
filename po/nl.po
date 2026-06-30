@@ -1,0 +1,150 @@
+# Dutch translations for aero-peek-for-gnome.
+# Copyright (C) 2026 Pierre Prezelin
+# This file is distributed under the same license as the aero-peek-for-gnome package.
+# Pierre Prezelin <pierreprezelin.pro@gmail.com>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: aero-peek-for-gnome 1\n"
+"Report-Msgid-Bugs-To: pierreprezelin.pro@gmail.com\n"
+"POT-Creation-Date: 2026-06-30 14:11+0200\n"
+"PO-Revision-Date: 2026-06-30 14:11+0200\n"
+"Last-Translator: Pierre Prezelin <pierreprezelin.pro@gmail.com>\n"
+"Language-Team: Dutch\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: prefs.js
+msgid "Reset to default"
+msgstr "Standaard herstellen"
+
+#: prefs.js
+msgid "Behaviour"
+msgstr "Gedrag"
+
+#: prefs.js
+msgid "Keep active window"
+msgstr "Actief venster behouden"
+
+#: prefs.js
+msgid "Do not hide the active window on toggle."
+msgstr "Het actieve venster niet verbergen bij het wisselen."
+
+#: prefs.js
+msgid "Aspect"
+msgstr "Uiterlijk"
+
+#: prefs.js
+msgid "Position on panel"
+msgstr "Positie in het paneel"
+
+#: prefs.js
+msgid "Where to place the toggle on the panel."
+msgstr "Waar de knop in het paneel te plaatsen."
+
+#: prefs.js
+msgid "Extreme Left"
+msgstr "Uiterst links"
+
+#: prefs.js
+msgid "Left"
+msgstr "Links"
+
+#: prefs.js
+msgid "Center"
+msgstr "Midden"
+
+#: prefs.js
+msgid "Right"
+msgstr "Rechts"
+
+#: prefs.js
+msgid "Extreme Right"
+msgstr "Uiterst rechts"
+
+#: prefs.js
+msgid "Toggle icon (.svg)"
+msgstr "Knoppictogram (.svg)"
+
+#: prefs.js
+msgid "Icon file used for the panel toggle."
+msgstr "Pictogrambestand voor de paneelknop."
+
+#: prefs.js
+msgid "Click to change icon"
+msgstr "Klik om pictogram te wijzigen"
+
+#: prefs.js
+msgid "Choose an icon"
+msgstr "Kies een pictogram"
+
+#: prefs.js
+msgid "Images (SVG)"
+msgstr "Afbeeldingen (SVG)"
+
+#: prefs.js
+msgid "Peek"
+msgstr "Voorvertoning"
+
+#: prefs.js
+msgid "Peek on hover"
+msgstr "Voorvertoning bij aanwijzen"
+
+#: prefs.js
+msgid "Make windows transparent when hovering the button."
+msgstr "Vensters transparant maken bij het aanwijzen van de knop."
+
+#: prefs.js
+msgid "Peek delay (ms)"
+msgstr "Voorvertoningsvertraging (ms)"
+
+#: prefs.js
+msgid "Delay before making windows transparent."
+msgstr "Vertraging voordat vensters transparant worden."
+
+#: prefs.js
+msgid "Peek duration (ms)"
+msgstr "Voorvertoonsduur (ms)"
+
+#: prefs.js
+msgid "Animation duration for transparency effect."
+msgstr "Animatieduur voor het transparantie-effect."
+
+#: prefs.js
+msgid "Window opacity (%)"
+msgstr "Vensterdoorzichtigheid (%)"
+
+#: prefs.js
+msgid "Opacity percentage during peek (0-100)."
+msgstr "Doorzichtigheidspercentage tijdens voorvertoning (0-100)."
+
+#: prefs.js
+msgid "Shortcuts"
+msgstr "Sneltoetsen"
+
+#: prefs.js
+msgid "Toggle windows"
+msgstr "Vensters wisselen"
+
+#: prefs.js
+msgid "Toggle windows with your keyboard instead of a click."
+msgstr "Vensters met het toetsenbord wisselen in plaats van klikken."
+
+#: prefs.js
+msgid "New shortcut…"
+msgstr "Nieuwe sneltoets…"
+
+#: prefs.js
+msgid "Set"
+msgstr "Instellen"
+
+#: prefs.js
+msgid "Enter new shortcut"
+msgstr "Nieuwe sneltoets invoeren"
+
+#: prefs.js
+msgid "Press Escape to cancel"
+msgstr "Druk op Escape om te annuleren"

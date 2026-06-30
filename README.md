@@ -17,10 +17,22 @@ Show/Hide all open desktop windows with one-click.
 - ⏰ Select the hover animation duration and delay before fading open windows
 - ⌨️ Choose your default keyboard shortcut to show/hide all open windows
 
-## Localization
+## Available translations
 
+- 🇩🇪 Deutsch
 - 🇬🇧 English
-- 🇫🇷 French
+- 🇪🇸 Español
+- 🇫🇷 Français
+- 🇮🇹 Italiano
+- 🇳🇱 Nederlands
+- 🇵🇹 Português
+
+**How to add a new language:**
+
+1. Copy-paste one of the `po/*.po` file into `po/[locale].po` (ex: `es.po`).
+2. Open this `[locale].po` file in the [Poedit](https://poedit.com/) software and translate all strings.
+3. Run `bun run translations:extract` to extract new strings to the `aero-peek-for-gnome.pot` file.
+4. Run `bun run translations:compile` to compile all `*.po` files to the `locale/` folder.
 
 ## Version history
 
