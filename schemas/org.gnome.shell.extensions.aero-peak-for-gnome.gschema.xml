@@ -14,33 +14,33 @@
         </key>
         <key name="toggle-icon" type="s">
             <default>'computer-symbolic'</default>
-            <summary>Toggle Icon</summary>
-            <description>Icon file used for the panel toggle (in SVG format).</description>
+            <summary>Toggle Icon (.svg)</summary>
+            <description>Icon file used for the panel toggle.</description>
         </key>
         <key name="peek-on-hover" type="b">
             <default>true</default>
             <summary>Peek on hover</summary>
-            <description>Make windows transparent when hovering the button</description>
+            <description>Make windows transparent when hovering the button,</description>
         </key>
         <key name="peek-duration" type="i">
             <default>200</default>
-            <summary>Peek duration</summary>
-            <description>Animation duration for transparency effect (in milliseconds)</description>
+            <summary>Peek duration (ms)</summary>
+            <description>Animation duration for transparency effect.</description>
         </key>
         <key name="peek-delay" type="i">
             <default>0</default>
-            <summary>Peek delay</summary>
-            <description>Delay before making windows transparent (in milliseconds)</description>
+            <summary>Peek delay (ms)</summary>
+            <description>Delay before making windows transparent.</description>
         </key>
         <key name="peek-opacity" type="i">
             <default>50</default>
-            <summary>Window opacity</summary>
+            <summary>Window opacity (%)</summary>
             <description>Opacity percentage during peek (0-100)</description>
         </key>
         <key name="toggle-shortcut" type="as">
             <default>['&lt;Ctrl&gt;&lt;Super&gt;m']</default>
-            <summary>Toggle shortcut</summary>
-            <description>Dedicated keyboard shortcut to toggle windows.</description>
+            <summary>Toggle windows</summary>
+            <description>Toggle windows with your keyboard instead of a click.</description>
         </key>
     </schema>
 </schemalist>

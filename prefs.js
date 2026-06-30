@@ -88,8 +88,8 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
         // Toggle icon
 
         const iconRow = new Adw.ActionRow({
-            title: 'Toggle Icon',
-            subtitle: 'Icon file used for the panel toggle (in SVG format).',
+            title: 'Toggle Icon (.svg)',
+            subtitle: 'Icon file used for the panel toggle.',
         });
 
         const iconButton = new Gtk.Button({
@@ -120,8 +120,7 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
 
             const filter = new Gtk.FileFilter();
             filter.add_mime_type('image/svg+xml');
-            filter.add_mime_type('image/png');
-            filter.set_name('Images (SVG, PNG)');
+            filter.set_name('Images (SVG)');
 
             const filterList = new Gio.ListStore({item_type: Gtk.FileFilter});
             filterList.append(filter);
@@ -296,8 +295,8 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
         page.add(groupShortcut);
 
         const shortcutRow = new Adw.ActionRow({
-            title: 'Toggle shortcut',
-            subtitle: 'Dedicated keyboard shortcut to toggle windows.',
+            title: 'Toggle windows',
+            subtitle: 'Toggle windows with your keyboard instead of a click.',
         });
 
         const shortcutLabel = new Gtk.ShortcutLabel({
