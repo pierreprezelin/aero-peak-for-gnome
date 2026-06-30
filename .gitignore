@@ -1,3 +1,4 @@
 .claude
+.eslintcache
 node_modules
 schemas/gschemas.compiled
