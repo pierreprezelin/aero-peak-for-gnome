@@ -67,10 +67,10 @@ export default class AeroPeakForWindows extends Extension {
         this._indicator = new AeroPeakButton(this);
 
         Main.wm.addKeybinding(
-            'toggle-shortcut', // name of the key (in the schema)
-            this._settings, // Settings object
-            Meta.KeyBindingFlags.NONE, // No specific flags
-            Shell.ActionMode.ALL, // Active everywhere
+            'toggle-shortcut',
+            this._settings,
+            Meta.KeyBindingFlags.NONE,
+            Shell.ActionMode.ALL,
             () => {
                 this.toggleWindows();
             }
@@ -116,7 +116,7 @@ export default class AeroPeakForWindows extends Extension {
 
             const actor = w.get_compositor_private();
             if (actor) {
-                actor.remove_all_transitions(); // Cancel any ongoing animation to avoid conflicts
+                actor.remove_all_transitions();
                 actor.ease({
                     opacity: enable
                         ? (this._settings.get_int('peak-opacity') / 100) * 255
