@@ -1,4 +1,4 @@
-# Aero Peak for GNOME
+# Aero Peek for GNOME
 
 Show/Hide all open desktop windows with one-click.
 
@@ -6,14 +6,14 @@ Show/Hide all open desktop windows with one-click.
 
 1. Download the latest release
 2. Extract it in your `~/.local/share/gnome-shell/extensions` folder
-3. Run `gnome-extensions enable aero-peak-for-gnome@pierreprezelin.com` in the terminal (or enable it from your favorite Extensions app)
+3. Run `gnome-extensions enable aero-peek-for-gnome@pierreprezelin.com` in the terminal (or enable it from your favorite Extensions app)
 
 ## Features
 
 - 🖼️ Mask (or keep) the active window
 - 🎨 Bring your own icon and choose its position on the panel
 - 👻 Enable/Disable window opacity on button hover
-- ☁️ Tweak the opacity of open windows while peaking
+- ☁️ Tweak the opacity of open windows while peeking
 - ⏰ Select the hover animation duration and delay before fading open windows
 - ⌨️ Choose your default keyboard shortcut to show/hide all open windows
 

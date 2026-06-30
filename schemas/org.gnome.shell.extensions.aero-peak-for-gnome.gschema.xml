@@ -1,47 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-    <schema id="org.gnome.shell.extensions.aero-peak-for-gnome"
-        path="/org/gnome/shell/extensions/aero-peak-for-gnome/">
+    <schema id="org.gnome.shell.extensions.aero-peek-for-gnome"
+        path="/org/gnome/shell/extensions/aero-peek-for-gnome/">
         <key name="keep-active-window" type="b">
             <default>false</default>
-            <summary>Keep active window while peaking</summary>
-            <description>All other windows will be made transparent</description>
+            <summary>Keep active window</summary>
+            <description>Do not hide the active window on toggle.</description>
         </key>
         <key name="position-in-panel" type="s">
             <default>'extreme-left'</default>
-            <summary>Button position in panel</summary>
-            <description>Position in the top panel. Valid values: 'extreme-left', 'left', 'center',
-                'right', 'extreme-right'</description>
+            <summary>Position on panel</summary>
+            <description>Where to place the toggle on the panel.</description>
         </key>
         <key name="toggle-icon" type="s">
             <default>'computer-symbolic'</default>
             <summary>Toggle Icon</summary>
-            <description>Icon displayed for the toggle button</description>
+            <description>Icon file used for the panel toggle (in SVG format).</description>
         </key>
-        <key name="peak-on-hover" type="b">
+        <key name="peek-on-hover" type="b">
             <default>true</default>
-            <summary>Enable peak on button hover</summary>
-            <description>Make windows transparent when dedicated button in hovered</description>
+            <summary>Peek on hover</summary>
+            <description>Make windows transparent when hovering the button</description>
         </key>
-        <key name="peak-duration" type="i">
+        <key name="peek-duration" type="i">
             <default>200</default>
-            <summary>Peak duration</summary>
-            <description>Animation duration while peaking</description>
+            <summary>Peek duration</summary>
+            <description>Animation duration for transparency effect (in milliseconds)</description>
         </key>
-        <key name="peak-delay" type="i">
+        <key name="peek-delay" type="i">
             <default>0</default>
-            <summary>Peak delay</summary>
-            <description>Duration before making windows transparent on hover</description>
+            <summary>Peek delay</summary>
+            <description>Delay before making windows transparent (in milliseconds)</description>
         </key>
-        <key name="peak-opacity" type="i">
+        <key name="peek-opacity" type="i">
             <default>50</default>
-            <summary>Windows opacity</summary>
-            <description>Opacity percentage (0-100) for windows when peaking</description>
+            <summary>Window opacity</summary>
+            <description>Opacity percentage during peek (0-100)</description>
         </key>
         <key name="toggle-shortcut" type="as">
             <default>['&lt;Ctrl&gt;&lt;Super&gt;m']</default>
-            <summary>Keyboard shortcut to toggle desktop</summary>
-            <description>Keyboard shortcut to show/hide all windows</description>
+            <summary>Toggle shortcut</summary>
+            <description>Dedicated keyboard shortcut to toggle windows.</description>
         </key>
     </schema>
 </schemalist>

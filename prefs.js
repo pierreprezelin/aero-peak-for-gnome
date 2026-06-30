@@ -6,7 +6,7 @@ import Gtk from 'gi://Gtk';
 
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
-export default class AeroPeakPreferences extends ExtensionPreferences {
+export default class AeroPeekPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         const settings = this.getSettings();
 
@@ -24,7 +24,7 @@ export default class AeroPeakPreferences extends ExtensionPreferences {
 
         const keepActiveRow = new Adw.ActionRow({
             title: 'Keep active window',
-            subtitle: 'Do not hide the active window when toggling',
+            subtitle: 'Do not hide the active window on toggle.',
         });
         const keepActiveSwitch = new Gtk.Switch({
             active: settings.get_boolean('keep-active-window'),
@@ -53,8 +53,8 @@ export default class AeroPeakPreferences extends ExtensionPreferences {
         // Position in panel
 
         const positionRow = new Adw.ComboRow({
-            title: 'Panel position',
-            subtitle: 'Where to place the button in the panel',
+            title: 'Position on panel',
+            subtitle: 'Where to place the toggle on the panel.',
         });
 
         const positionModel = new Gtk.StringList();
@@ -88,8 +88,8 @@ export default class AeroPeakPreferences extends ExtensionPreferences {
         // Toggle icon
 
         const iconRow = new Adw.ActionRow({
-            title: 'Toggle icon',
-            subtitle: 'Icon for the panel button',
+            title: 'Toggle Icon',
+            subtitle: 'Icon file used for the panel toggle (in SVG format).',
         });
 
         const iconButton = new Gtk.Button({
@@ -177,43 +177,43 @@ export default class AeroPeakPreferences extends ExtensionPreferences {
         groupAspect.add(iconRow);
 
         /**
-         * Aperçu
+         * Preview
          */
 
-        const groupPeak = new Adw.PreferencesGroup({
-            title: 'Peak',
+        const groupPeek = new Adw.PreferencesGroup({
+            title: 'Peek',
         });
-        page.add(groupPeak);
+        page.add(groupPeek);
 
-        // Peak on hover
+        // Peek on hover
 
-        const peakOnHoverRow = new Adw.ActionRow({
-            title: 'Peak on hover',
-            subtitle: 'Make windows transparent when hovering the button',
+        const peekOnHoverRow = new Adw.ActionRow({
+            title: 'Peek on hover',
+            subtitle: 'Make windows transparent when hovering the button.',
         });
-        const peakOnHoverSwitch = new Gtk.Switch({
-            active: settings.get_boolean('peak-on-hover'),
+        const peekOnHoverSwitch = new Gtk.Switch({
+            active: settings.get_boolean('peek-on-hover'),
             valign: Gtk.Align.CENTER,
         });
 
         settings.bind(
-            'peak-on-hover',
-            peakOnHoverSwitch,
+            'peek-on-hover',
+            peekOnHoverSwitch,
             'active',
             Gio.SettingsBindFlags.DEFAULT
         );
 
-        peakOnHoverRow.add_suffix(peakOnHoverSwitch);
-        peakOnHoverRow.activatable_widget = peakOnHoverSwitch;
-        groupPeak.add(peakOnHoverRow);
+        peekOnHoverRow.add_suffix(peekOnHoverSwitch);
+        peekOnHoverRow.activatable_widget = peekOnHoverSwitch;
+        groupPeek.add(peekOnHoverRow);
 
-        // Peak delay
+        // Peek delay
 
-        const peakDelayRow = new Adw.ActionRow({
-            title: 'Peak delay (ms)',
-            subtitle: 'Delay before making windows transparent',
+        const peekDelayRow = new Adw.ActionRow({
+            title: 'Peek delay (ms)',
+            subtitle: 'Delay before making windows transparent.',
         });
-        const peakDelaySpin = new Gtk.SpinButton({
+        const peekDelaySpin = new Gtk.SpinButton({
             adjustment: new Gtk.Adjustment({
                 lower: 0,
                 upper: 1000,
@@ -224,22 +224,22 @@ export default class AeroPeakPreferences extends ExtensionPreferences {
         });
 
         settings.bind(
-            'peak-delay',
-            peakDelaySpin,
+            'peek-delay',
+            peekDelaySpin,
             'value',
             Gio.SettingsBindFlags.DEFAULT
         );
 
-        peakDelayRow.add_suffix(peakDelaySpin);
-        groupPeak.add(peakDelayRow);
+        peekDelayRow.add_suffix(peekDelaySpin);
+        groupPeek.add(peekDelayRow);
 
-        // Peak duration
+        // Peek duration
 
-        const peakDurationRow = new Adw.ActionRow({
-            title: 'Peak duration (ms)',
-            subtitle: 'Animation duration for transparency effect',
+        const peekDurationRow = new Adw.ActionRow({
+            title: 'Peek duration (ms)',
+            subtitle: 'Animation duration for transparency effect.',
         });
-        const peakDurationSpin = new Gtk.SpinButton({
+        const peekDurationSpin = new Gtk.SpinButton({
             adjustment: new Gtk.Adjustment({
                 lower: 0,
                 upper: 1000,
@@ -250,22 +250,22 @@ export default class AeroPeakPreferences extends ExtensionPreferences {
         });
 
         settings.bind(
-            'peak-duration',
-            peakDurationSpin,
+            'peek-duration',
+            peekDurationSpin,
             'value',
             Gio.SettingsBindFlags.DEFAULT
         );
 
-        peakDurationRow.add_suffix(peakDurationSpin);
-        groupPeak.add(peakDurationRow);
+        peekDurationRow.add_suffix(peekDurationSpin);
+        groupPeek.add(peekDurationRow);
 
-        // Peak opacity
+        // Peek opacity
 
-        const peakOpacityRow = new Adw.ActionRow({
+        const peekOpacityRow = new Adw.ActionRow({
             title: 'Window opacity (%)',
-            subtitle: 'Opacity percentage during peak (0-100)',
+            subtitle: 'Opacity percentage during peek (0-100).',
         });
-        const peakOpacityScale = new Gtk.Scale({
+        const peekOpacityScale = new Gtk.Scale({
             orientation: Gtk.Orientation.HORIZONTAL,
             draw_value: true,
             value_pos: Gtk.PositionType.RIGHT,
@@ -273,31 +273,31 @@ export default class AeroPeakPreferences extends ExtensionPreferences {
             valign: Gtk.Align.CENTER,
             hexpand: true,
         });
-        peakOpacityScale.set_range(0, 100);
-        peakOpacityScale.set_increments(5, 10);
+        peekOpacityScale.set_range(0, 100);
+        peekOpacityScale.set_increments(5, 10);
 
         settings.bind(
-            'peak-opacity',
-            peakOpacityScale.get_adjustment(),
+            'peek-opacity',
+            peekOpacityScale.get_adjustment(),
             'value',
             Gio.SettingsBindFlags.DEFAULT
         );
 
-        peakOpacityRow.add_suffix(peakOpacityScale);
-        groupPeak.add(peakOpacityRow);
+        peekOpacityRow.add_suffix(peekOpacityScale);
+        groupPeek.add(peekOpacityRow);
 
         /**
-         * Keyboard Shortcut
+         * Shortcuts
          */
 
         const groupShortcut = new Adw.PreferencesGroup({
-            title: 'Shortcut',
+            title: 'Shortcuts',
         });
         page.add(groupShortcut);
 
         const shortcutRow = new Adw.ActionRow({
             title: 'Toggle shortcut',
-            subtitle: 'Keyboard shortcut to show/hide all windows',
+            subtitle: 'Dedicated keyboard shortcut to toggle windows.',
         });
 
         const shortcutLabel = new Gtk.ShortcutLabel({
@@ -320,7 +320,7 @@ export default class AeroPeakPreferences extends ExtensionPreferences {
                 transient_for: window,
                 modal: true,
                 buttons: Gtk.ButtonsType.CANCEL,
-                text: 'Press new shortcut',
+                text: 'Enter new shortcut',
                 secondary_text: 'Press Escape to cancel',
             });
 

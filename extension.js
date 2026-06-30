@@ -9,8 +9,8 @@ import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 
-const AeroPeakButton = GObject.registerClass(
-    class AeroPeakButton extends PanelMenu.Button {
+const AeroPeekButton = GObject.registerClass(
+    class AeroPeekButton extends PanelMenu.Button {
         _init(extension) {
             super._init(0.0, extension.metadata.name, true);
             this._extension = extension;
@@ -49,7 +49,7 @@ const AeroPeakButton = GObject.registerClass(
     }
 );
 
-export default class AeroPeakForWindows extends Extension {
+export default class AeroPeekForWindows extends Extension {
     enable() {
         this._settings = this.getSettings();
         this._settingsConnections = [];
@@ -64,7 +64,7 @@ export default class AeroPeakForWindows extends Extension {
             )
         );
 
-        this._indicator = new AeroPeakButton(this);
+        this._indicator = new AeroPeekButton(this);
 
         Main.wm.addKeybinding(
             'toggle-shortcut',
@@ -111,7 +111,7 @@ export default class AeroPeakForWindows extends Extension {
 
         windows.forEach(w => {
             if (w.minimized) return;
-            if (enable && !this._settings.get_boolean('peak-on-hover')) return;
+            if (enable && !this._settings.get_boolean('peek-on-hover')) return;
             if (this._shouldIgnore(w)) return;
 
             const actor = w.get_compositor_private();
@@ -119,10 +119,10 @@ export default class AeroPeakForWindows extends Extension {
                 actor.remove_all_transitions();
                 actor.ease({
                     opacity: enable
-                        ? (this._settings.get_int('peak-opacity') / 100) * 255
+                        ? (this._settings.get_int('peek-opacity') / 100) * 255
                         : 255,
-                    duration: this._settings.get_int('peak-duration'),
-                    delay: enable ? this._settings.get_int('peak-delay') : 0,
+                    duration: this._settings.get_int('peek-duration'),
+                    delay: enable ? this._settings.get_int('peek-delay') : 0,
                     mode: Clutter.AnimationMode.EASE_OUT_QUAD,
                 });
             }
@@ -148,7 +148,7 @@ export default class AeroPeakForWindows extends Extension {
             this._indicator = null;
         }
 
-        this._indicator = new AeroPeakButton(this);
+        this._indicator = new AeroPeekButton(this);
 
         const positionMap = {
             'extreme-left': {box: 'left', index: 0},
