@@ -105,6 +105,43 @@ export default class AeroPeakForWindows extends Extension {
         Main.wm.removeKeybinding('toggle-shortcut');
     }
 
+    previewDesktop(enable) {
+        const workspace = global.workspace_manager.get_active_workspace();
+        const windows = workspace.list_windows();
+
+        windows.forEach(w => {
+            if (w.minimized) return;
+            if (enable && !this._settings.get_boolean('peak-on-hover')) return;
+            if (this._shouldIgnore(w)) return;
+
+            const actor = w.get_compositor_private();
+            if (actor) {
+                actor.remove_all_transitions(); // Cancel any ongoing animation to avoid conflicts
+                actor.ease({
+                    opacity: enable
+                        ? (this._settings.get_int('peak-opacity') / 100) * 255
+                        : 255,
+                    duration: this._settings.get_int('peak-duration'),
+                    delay: enable ? this._settings.get_int('peak-delay') : 0,
+                    mode: Clutter.AnimationMode.EASE_OUT_QUAD,
+                });
+            }
+        });
+    }
+
+    toggleWindows() {
+        const workspace = global.workspace_manager.get_active_workspace();
+        const windows = workspace.list_windows();
+        const validWindows = windows.filter(w => !this._shouldIgnore(w));
+        const hasUnminimized = validWindows.some(w => !w.minimized);
+
+        if (hasUnminimized) {
+            validWindows.forEach(w => w.minimize());
+        } else {
+            validWindows.forEach(w => w.unminimize());
+        }
+    }
+
     _refreshIndicator() {
         if (this._indicator) {
             this._indicator.destroy();
@@ -129,43 +166,6 @@ export default class AeroPeakForWindows extends Extension {
             position.index,
             position.box
         );
-    }
-
-    toggleWindows() {
-        const workspace = global.workspace_manager.get_active_workspace();
-        const windows = workspace.list_windows();
-        const validWindows = windows.filter(w => !this._shouldIgnore(w));
-        const hasUnminimized = validWindows.some(w => !w.minimized);
-
-        if (hasUnminimized) {
-            validWindows.forEach(w => w.minimize());
-        } else {
-            validWindows.forEach(w => w.unminimize());
-        }
-    }
-
-    previewDesktop(enable) {
-        const workspace = global.workspace_manager.get_active_workspace();
-        const windows = workspace.list_windows();
-
-        windows.forEach(w => {
-            if (w.minimized) return;
-            if (enable && !this._settings.get_boolean('peak-on-hover')) return;
-            if (this._shouldIgnore(w)) return;
-
-            const actor = w.get_compositor_private();
-            if (actor) {
-                actor.remove_all_transitions(); // Cancel any ongoing animation to avoid conflicts
-                actor.ease({
-                    opacity: enable
-                        ? (this._settings.get_int('peak-opacity') / 100) * 255
-                        : 255,
-                    duration: this._settings.get_int('peak-duration'),
-                    delay: enable ? this._settings.get_int('peak-delay') : 0,
-                    mode: Clutter.AnimationMode.EASE_OUT_QUAD,
-                });
-            }
-        });
     }
 
     /**
