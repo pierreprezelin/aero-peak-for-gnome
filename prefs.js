@@ -13,6 +13,16 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
         const page = new Adw.PreferencesPage();
         window.add(page);
 
+        const makeResetButton = key => {
+            const btn = new Gtk.Button({
+                icon_name: 'edit-undo-symbolic',
+                valign: Gtk.Align.CENTER,
+                tooltip_text: 'Reset to default',
+            });
+            btn.connect('clicked', () => settings.reset(key));
+            return btn;
+        };
+
         /**
          * Behaviour
          */
@@ -83,6 +93,20 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
                 positionValues[positionRow.get_selected()]
             );
         });
+
+        const positionResetButton = new Gtk.Button({
+            icon_name: 'edit-undo-symbolic',
+            valign: Gtk.Align.CENTER,
+            tooltip_text: 'Reset to default',
+        });
+        positionResetButton.connect('clicked', () => {
+            settings.reset('position-in-panel');
+            const idx = positionValues.indexOf(
+                settings.get_string('position-in-panel')
+            );
+            positionRow.set_selected(idx >= 0 ? idx : 0);
+        });
+        positionRow.add_suffix(positionResetButton);
 
         groupAspect.add(positionRow);
 
@@ -157,28 +181,18 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
             });
         });
 
-        const resetButton = new Gtk.Button({
-            icon_name: 'edit-undo-symbolic',
-            valign: Gtk.Align.CENTER,
-            tooltip_text: 'Reset to default',
-        });
-
-        resetButton.connect('clicked', () => {
-            settings.reset('toggle-icon');
-        });
-
         const iconBox = new Gtk.Box({
             spacing: 12,
             valign: Gtk.Align.CENTER,
         });
         iconBox.append(iconButton);
-        iconBox.append(resetButton);
+        iconBox.append(makeResetButton('toggle-icon'));
 
         iconRow.add_suffix(iconBox);
         groupAspect.add(iconRow);
 
         /**
-         * Preview
+         * Peek
          */
 
         const groupPeek = new Adw.PreferencesGroup({
@@ -232,6 +246,7 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
         );
 
         peekDelayRow.add_suffix(peekDelaySpin);
+        peekDelayRow.add_suffix(makeResetButton('peek-delay'));
         groupPeek.add(peekDelayRow);
 
         // Peek duration
@@ -258,6 +273,7 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
         );
 
         peekDurationRow.add_suffix(peekDurationSpin);
+        peekDurationRow.add_suffix(makeResetButton('peek-duration'));
         groupPeek.add(peekDurationRow);
 
         // Peek opacity
@@ -276,6 +292,11 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
         });
         peekOpacityScale.set_range(0, 100);
         peekOpacityScale.set_increments(5, 10);
+        peekOpacityScale.add_mark(
+            settings.get_default_value('peek-opacity').get_int32(),
+            Gtk.PositionType.TOP,
+            null
+        );
 
         settings.bind(
             'peek-opacity',
@@ -285,6 +306,7 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
         );
 
         peekOpacityRow.add_suffix(peekOpacityScale);
+        peekOpacityRow.add_suffix(makeResetButton('peek-opacity'));
         groupPeek.add(peekOpacityRow);
 
         /**
@@ -349,12 +371,26 @@ export default class AeroPeekPreferences extends ExtensionPreferences {
             dialog.show();
         });
 
+        const shortcutResetButton = new Gtk.Button({
+            icon_name: 'edit-undo-symbolic',
+            valign: Gtk.Align.CENTER,
+            tooltip_text: 'Reset to default',
+        });
+        shortcutResetButton.connect('clicked', () => {
+            settings.reset('toggle-shortcut');
+            const defaultShortcut = settings.get_strv('toggle-shortcut');
+            shortcutLabel.set_accelerator(
+                defaultShortcut.length > 0 ? defaultShortcut[0] : ''
+            );
+        });
+
         const shortcutBox = new Gtk.Box({
             spacing: 12,
             valign: Gtk.Align.CENTER,
         });
         shortcutBox.append(shortcutLabel);
         shortcutBox.append(shortcutButton);
+        shortcutBox.append(shortcutResetButton);
 
         shortcutRow.add_suffix(shortcutBox);
         groupShortcut.add(shortcutRow);
